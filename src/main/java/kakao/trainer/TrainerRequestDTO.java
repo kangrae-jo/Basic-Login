@@ -1,6 +1,6 @@
-package kakao.user;
+package kakao.trainer;
 
-public class UserRequestDTO {
+public class TrainerRequestDTO {
 
     public static class LoginRequestDTO {
         private String email;

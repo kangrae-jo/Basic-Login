@@ -1,10 +1,9 @@
 package kakao.login;
 
 import jakarta.servlet.http.HttpServletResponse;
-import kakao.user.User;
-import kakao.user.UserConverter;
-import kakao.user.UserRequestDTO;
-import kakao.user.UserResponseDTO;
+import kakao.trainer.Trainer;
+import kakao.trainer.TrainerRequestDTO;
+import kakao.trainer.TrainerResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,16 +21,18 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> join(@RequestBody UserRequestDTO.LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<?> join(@RequestBody TrainerRequestDTO.LoginRequestDTO loginRequestDTO) {
         return null;
     }
 
     // 카카오 로그인 처리
     @GetMapping("/auth/login/kakao")
-    public BaseResponse<UserResponseDTO.JoinResultDTO> kakaoLogin(@RequestParam("code") String accessCode,
-                                                                  HttpServletResponse httpServletResponse) {
-        User user = authService.oAuthLogin(accessCode, httpServletResponse);
-        return BaseResponse.onSuccess(UserConverter.toJoinResultDTO(user));
+    public BaseResponse<TrainerResponseDTO> kakaoLogin(@RequestParam("code") String accessCode,
+                                                       HttpServletResponse httpServletResponse) {
+        Trainer trainer = authService.oAuthLogin(accessCode, httpServletResponse);
+        System.out.println("success!");
+
+        return BaseResponse.onSuccess(new TrainerResponseDTO(trainer.getEmail(), trainer.getName()));
     }
 
 }

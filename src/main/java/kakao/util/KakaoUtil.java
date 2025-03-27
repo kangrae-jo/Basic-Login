@@ -1,9 +1,11 @@
 package kakao.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kakao.login.KakaoDTO;
 import kakao.login.KakaoDTO.OAuthToken;
+import kakao.login.TrainerDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -53,31 +55,32 @@ public class KakaoUtil {
         return oAuthToken;
     }
 
-    public KakaoDTO.KakaoProfile requestProfile(KakaoDTO.OAuthToken oAuthToken) {
-        RestTemplate restTemplate2 = new RestTemplate();
+    public TrainerDTO requestProfile(KakaoDTO.OAuthToken oAuthToken) {
+        RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers2 = new HttpHeaders();
-        headers2.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
-        headers2.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + oAuthToken.getAccess_token());
+        headers.add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers2);
-        ResponseEntity<String> response2 = restTemplate2.exchange(
+        HttpEntity<MultiValueMap<String, String>> kakaoProfileRequest = new HttpEntity<>(headers);
+        ResponseEntity<String> response = restTemplate.exchange(
                 "https://kapi.kakao.com/v2/user/me",
-                HttpMethod.POST,
+                HttpMethod.GET,
                 kakaoProfileRequest,
                 String.class);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        KakaoDTO.KakaoProfile kakaoProfile = null;
         try {
-            kakaoProfile = objectMapper.readValue(response2.getBody(), KakaoDTO.KakaoProfile.class);
-            System.out.println("requestProfile success!");
-        } catch (JsonProcessingException e) {
-            System.out.println("requestProfile failed!");
-            //log.info(Arrays.toString(e.getStackTrace()));
-            //throw new AuthHandler(ErrorStatus._PARSING_ERROR);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode root = objectMapper.readTree(response.getBody());
+
+            Long id = root.path("id").asLong();
+            String name = root.path("properties").path("nickname").asText();
+            String email = root.path("kakao_account").path("email").asText(null); // email은 nullable
+
+            return new TrainerDTO(id, name, email);
+        } catch (Exception e) {
+            throw new RuntimeException("[Error} 카카오 사용자 정보 파싱 실패", e);
         }
-        return kakaoProfile;
     }
 
 }

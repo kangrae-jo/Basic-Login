@@ -1,8 +1,8 @@
 package kakao.login;
 
 import jakarta.servlet.http.HttpServletResponse;
-import kakao.user.User;
-import kakao.user.UserRepository;
+import kakao.trainer.Trainer;
+import kakao.trainer.TrainerRepository;
 import kakao.util.JwtUtil;
 import kakao.util.KakaoUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,31 +14,26 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final KakaoUtil kakaoUtil;
-    private final UserRepository userRepository;
+    private final TrainerRepository trainerRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public User oAuthLogin(String accessCode, HttpServletResponse httpServletResponse) {
+    public Trainer oAuthLogin(String accessCode, HttpServletResponse httpServletResponse) {
         KakaoDTO.OAuthToken oAuthToken = kakaoUtil.requestToken(accessCode);
-        KakaoDTO.KakaoProfile kakaoProfile = kakaoUtil.requestProfile(oAuthToken);
+        TrainerDTO kakaoProfile = kakaoUtil.requestProfile(oAuthToken);
 
-        String email = kakaoProfile.getKakao_account().getEmail();
-        User user = userRepository.findByEmail(email).orElseGet(() -> createNewUser(kakaoProfile));
+        String email = kakaoProfile.getEmail();
+        Trainer trainer = trainerRepository.findByEmail(email).orElseGet(() -> createNewUser(kakaoProfile));
 
-        String token = jwtUtil.createAccessToken(user.getEmail(), user.getRole());
+        String token = jwtUtil.createAccessToken(trainer.getEmail());
         httpServletResponse.setHeader("Authorization", token);
 
-        return user;
+        return trainer;
     }
 
-    private User createNewUser(KakaoDTO.KakaoProfile kakaoProfile) {
-        User newUser = AuthConverter.toUser(
-                kakaoProfile.getKakao_account().getEmail(),
-                kakaoProfile.getKakao_account().getProfile().getNickname(),
-                null,
-                passwordEncoder
-        );
-        return userRepository.save(newUser);
+    private Trainer createNewUser(TrainerDTO kakaoProfile) {
+        Trainer trainer = new Trainer(kakaoProfile.getId(), kakaoProfile.getEmail(), kakaoProfile.getName());
+        return trainerRepository.save(trainer);
     }
 
 }

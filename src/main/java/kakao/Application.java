@@ -12,4 +12,3 @@ public class Application {
 
 }
 
-//https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=75f04676990b0bf0deebd59d284221ae&redirect_uri=http://localhost:8080/auth/login/kakao

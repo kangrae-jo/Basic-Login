@@ -1,5 +1,6 @@
 package kakao.member;
 
+import com.sun.security.auth.UserPrincipal;
 import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,10 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
-    public MemberDTO getUserInfo(String name) {
-        Member member = memberRepository.findById(name)
-                .orElseThrow(() -> new NoSuchElementException("[ERROR] 해당 사용자가 존재하지 않습니다: " + name));
+    public MemberDTO getUserInfo(UserPrincipal userPrincipal) {
+        Member member = memberRepository.findById(userPrincipal.getName())
+                .orElseThrow(() -> new NoSuchElementException("[ERROR] 해당 사용자가 존재하지 않습니다."));
+
         return new MemberDTO(member.getName());
     }
 

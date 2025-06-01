@@ -1,5 +1,7 @@
 package kakao.config;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 import kakao.oauth.CustomOAuth2UserService;
 import kakao.oauth.JwtAuthenticationFilter;
 import kakao.oauth.OAuth2FailureHandler;
@@ -36,6 +38,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -48,7 +51,6 @@ public class SecurityConfig {
                             .successHandler(oAuth2SuccessHandler)
                             .failureHandler(oAuth2FailureHandler);
                 })
-                // JWT 필터를 UsernamePasswordAuthenticationFilter 앞에 추가
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

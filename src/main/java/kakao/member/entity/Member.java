@@ -1,4 +1,4 @@
-package kakao.member;
+package kakao.member.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -16,5 +16,5 @@ public class Member {
 
     @Id
     private String name;
-    
+
 }

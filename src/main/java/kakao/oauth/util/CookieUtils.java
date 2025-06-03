@@ -1,4 +1,4 @@
-package kakao.oauth;
+package kakao.oauth.util;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

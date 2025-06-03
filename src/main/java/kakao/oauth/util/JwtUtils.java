@@ -1,4 +1,4 @@
-package kakao.oauth;
+package kakao.oauth.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtUtil {
+public class JwtUtils {
 
     // 만약 실제로 release 한다면 보안 강도가 더 높은 키로 변경
     @Value("${jwt.secret.key}")

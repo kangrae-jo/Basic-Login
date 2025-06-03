@@ -1,4 +1,4 @@
-package kakao.member;
+package kakao.member.paylod;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

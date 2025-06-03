@@ -1,7 +1,10 @@
-package kakao.member;
+package kakao.member.service;
 
 import com.sun.security.auth.UserPrincipal;
 import java.util.NoSuchElementException;
+import kakao.member.entity.Member;
+import kakao.member.paylod.MemberDTO;
+import kakao.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package kakao.oauth;
+package kakao.oauth.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

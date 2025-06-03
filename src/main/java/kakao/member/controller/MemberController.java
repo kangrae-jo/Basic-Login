@@ -1,6 +1,7 @@
-package kakao.member;
+package kakao.member.controller;
 
 import com.sun.security.auth.UserPrincipal;
+import kakao.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

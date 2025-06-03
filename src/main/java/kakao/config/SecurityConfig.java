@@ -4,8 +4,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import kakao.oauth.CustomOAuth2UserService;
 import kakao.oauth.JwtAuthenticationFilter;
-import kakao.oauth.OAuth2FailureHandler;
-import kakao.oauth.OAuth2SuccessHandler;
+import kakao.oauth.handler.OAuth2FailureHandler;
+import kakao.oauth.handler.OAuth2SuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

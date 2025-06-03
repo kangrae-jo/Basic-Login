@@ -18,7 +18,6 @@ public class CookieUtils {
                 }
             }
         }
-
         return Optional.empty();
     }
 
@@ -45,14 +44,11 @@ public class CookieUtils {
     }
 
     public static String serialize(Object object) {
-        return Base64.getUrlEncoder()
-                .encodeToString(SerializationUtils.serialize(object));
+        return Base64.getUrlEncoder().encodeToString(SerializationUtils.serialize(object));
     }
 
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-        return cls.cast(SerializationUtils.deserialize(
-                Base64.getUrlDecoder().decode(cookie.getValue())));
+        return cls.cast(SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
     }
-
 
 }

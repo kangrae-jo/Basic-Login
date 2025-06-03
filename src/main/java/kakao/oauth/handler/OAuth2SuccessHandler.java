@@ -71,4 +71,5 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         cookie.setMaxAge(0); // 즉시 삭제
         response.addCookie(cookie);
     }
+
 }

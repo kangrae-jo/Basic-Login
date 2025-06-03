@@ -1,9 +1,11 @@
-package kakao.oauth;
+package kakao.oauth.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import kakao.oauth.CustomOAuth2User;
+import kakao.oauth.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -16,17 +18,16 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     @Value("${client.redirect-url}")
     private String CLIENT_URL;
-    private final JwtUtil jwtUtil;
+    private final JwtUtils jwtUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        String trainerName = oAuth2User.getName();
 
         // JWT 생성
-        String accessToken = jwtUtil.createToken(trainerName);
+        String accessToken = jwtUtil.createToken(oAuth2User.getName());
 
         // JWT를 프론트에 리다이렉트하며 전달
         String redirectUrl = CLIENT_URL + "/oauth2/success?token=" + accessToken;

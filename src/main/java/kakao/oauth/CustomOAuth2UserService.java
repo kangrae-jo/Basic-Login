@@ -1,8 +1,8 @@
 package kakao.oauth;
 
 import java.util.Map;
-import kakao.member.Member;
-import kakao.member.MemberRepository;
+import kakao.member.entity.Member;
+import kakao.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

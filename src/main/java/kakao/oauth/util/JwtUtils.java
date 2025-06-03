@@ -16,19 +16,19 @@ public class JwtUtils {
     // 24시간
     private final long expirationMs = 1000 * 60 * 60 * 24;
 
-    public String createToken(String trainerName) {
+    public String createToken(String name) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + expirationMs);
 
         return Jwts.builder()
-                .setSubject(trainerName)
+                .setSubject(name)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
-    public String getTrainerNameFromToken(String token) {
+    public String getMemberNameFromToken(String token) {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .parseClaimsJws(token)

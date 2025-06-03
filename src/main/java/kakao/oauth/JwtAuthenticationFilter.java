@@ -5,13 +5,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 import kakao.member.entity.Member;
 import kakao.member.repository.MemberRepository;
 import kakao.oauth.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,16 +34,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 // 2. 토큰에서 사용자 이름 추출
-                String trainerName = jwtUtil.getTrainerNameFromToken(token);
+                String name = jwtUtil.getMemberNameFromToken(token);
 
                 // 3. 사용자 정보 조회
-                Member member = memberRepository.findById(trainerName).orElse(null);
+                Member member = memberRepository.findById(name).orElse(null);
                 if (member != null) {
                     // 4. 인증 객체 생성
+                    UserPrincipal principal = UserPrincipal.create(member);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                            member.getName(),  // 로그인한 사용자 Id (이후 @AuthenticationPrincipal 등에서 사용)
-                            null,               // 비밀번호 정보(우리는 JWT 로그인이라 생략)
-                            List.of(new SimpleGrantedAuthority("ROLE_USER"))
+                            principal, // principal에 UserPrincipal 객체 저장
+                            null,             // 비밀번호 생략
+                            principal.getAuthorities()
                     );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }

@@ -25,10 +25,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
                                         HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        String trainerName = oAuth2User.getName();
 
         // JWT 생성
-        String accessToken = jwtUtil.createToken(trainerName);
+        String accessToken = jwtUtil.createToken(oAuth2User.getName());
 
         // JWT를 프론트에 리다이렉트하며 전달
         String redirectUrl = CLIENT_URL + "/oauth2/success?token=" + accessToken;

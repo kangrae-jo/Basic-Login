@@ -1,7 +1,7 @@
 package kakao.member.controller;
 
-import com.sun.security.auth.UserPrincipal;
 import kakao.member.service.MemberService;
+import kakao.oauth.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,10 +19,13 @@ public class MemberController {
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
-
+    
     @GetMapping("/info")
-    public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return ResponseEntity.ok(memberService.getUserInfo(userPrincipal));
+    public ResponseEntity<?> getMyInfo(@AuthenticationPrincipal UserPrincipal user) {
+        if (user == null) {
+            return ResponseEntity.status(401).body("[ERROR] 로그인이 필요합니다.");
+        }
+        return ResponseEntity.ok(memberService.getUserInfo(user));
     }
 
 }
